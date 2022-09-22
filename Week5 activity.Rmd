@@ -1,0 +1,53 @@
+---
+title: "Week 5 Visualizations Activity"
+author: Guan Yu Teoh
+date: 2021
+output: 
+   html_document:
+          theme:
+              bootswatch: cyborg 
+
+---
+```{r setup, include=FALSE}
+install.packages("bslib", repos = "http://cran.us.r-project.org")
+install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+install.packages("knitr", repos = "http://cran.us.r-project.org")
+install.packages("readr", repos = "http://cran.us.r-project.org")
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyverse)
+```
+
+```{r, include = FALSE}
+#reading file using read_csv
+url <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drivers/bad-drivers.csv"
+df <- read_csv(url)
+```
+
+```{r, include = FALSE}
+#Renaming the columns and cutting down two uneccesary columns so its easier to read/understand and saves space.
+df <- select(df,- c('Car Insurance Premiums ($)', 'Losses incurred by insurance companies for collisions per insured driver ($)'))
+df<- df %>% 
+  rename("drivers_in_fatal_collision_per_bmiles" = "Number of drivers involved in fatal collisions per billion miles",
+         "Drivers_Speeding_Pct" = "Percentage Of Drivers Involved In Fatal Collisions Who Were Speeding",
+         "Drivers_Not_Distracted" = "Percentage Of Drivers Involved In Fatal Collisions Who Were Not Distracted",
+         "Drivers_Alcohol_Impaired_Pct" = `Percentage Of Drivers Involved In Fatal Collisions Who Were Alcohol-Impaired`,
+         "Drivers_No_Prior_Accidents" = "Percentage Of Drivers Involved In Fatal Collisions Who Had Not Been Involved In Any Previous Accidents")
+```
+
+```{r, echo = FALSE}
+ggplot(df, aes(x=State, y=drivers_in_fatal_collision_per_bmiles)) + theme(axis.text.x=element_text(angle=90)) + geom_bar(stat="identity",width = 0.2)
+```
+
+```{r, echo = TRUE}
+```
+Above is a bar chart that shows the drivers invloved in fatal collisions per billion miles in each state in the United States. From the bar chart, we can see that WV, SC and ND have the highest fatal collision counts among all the other states. District of Columbia has the lowest drivers involved in fatal collision count. Every state have at least 5 fatal collision counts per billion miles. 
+
+```{r, echo = FALSE}
+ggplot(df, aes(x=Drivers_Speeding_Pct)) + geom_histogram(binwidth=1)
+```
+
+```{r, echo = TRUE}
+```
+Above is a histogram that shows the number of states that correspond to the percentages of drivers involved in fatal collision when they were speeding and the histogram shows most states have around 30-45% of the drivers involved in fatal collisions that were speeding. 
